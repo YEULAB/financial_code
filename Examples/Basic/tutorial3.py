@@ -56,8 +56,8 @@ def main():
         lf_port_alloc.pop(i_index)
 
     # Reading the historical data.
-    dt_end = dt.datetime(2011, 1, 1)
-    dt_start = dt_end - dt.timedelta(days=1095)  # Three years
+    dt_end = dt.datetime(2010, 12, 31)
+    dt_start = dt_end - dt.timedelta(days=252)  # Three years
     # We need closing prices so the timestamp should be hours=16.
     dt_timeofday = dt.timedelta(hours=16)
 
