@@ -6,7 +6,7 @@ import os
 import math
 import operator
 
-path = '/path/to/tickers/*.csv'
+path = '/Users/seanokeefe/Desktop/Github/financial_code/work/data/*.csv'
 s = dict()
 dataframes = dict()
 for fpath in glob(path):
@@ -17,7 +17,9 @@ for fpath in glob(path):
     df.index = df.index.order()
     df['Cumlative'] = df['Adj Close'] / df['Adj Close'][0]
     daily = df['Adj Close'][1:].values / df['Adj Close'][:-1].values - 1
-    s[ticker] = math.sqrt(250) * np.average(daily) / np.std(daily)
+    s[ticker] = math.sqrt(252) * np.average(daily) / np.std(daily)
     dataframes[ticker] = df
 
 sharpes = list(reversed(sorted(s.iteritems(), key=operator.itemgetter(1))))
+
+print sharpes
