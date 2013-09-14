@@ -6,7 +6,7 @@ import os
 import math
 import operator
 
-path = '/path/to/tickers/*.csv'
+path = '/Users/seanokeefe/Desktop/Github/financial_code/work/data/*.csv'
 s = dict()
 dataframes = dict()
 for fpath in glob(path):
@@ -21,3 +21,4 @@ for fpath in glob(path):
     dataframes[ticker] = df
 
 sharpes = list(reversed(sorted(s.iteritems(), key=operator.itemgetter(1))))
+
