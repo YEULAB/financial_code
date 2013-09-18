@@ -1,3 +1,5 @@
+#Code provides the best Sharpe Ratio out of 4 quities during a give time frame. To use, change ls_symbols to the equities desired and change dt_start and dt_end to the time frame. 
+
 # QSTK Imports
 import QSTK.qstkutil.qsdateutil as du
 import QSTK.qstkutil.tsutil as tsu
@@ -14,7 +16,7 @@ c1 = 0.0
 d1 = 0.0
 
 allocation_increments = np.arange(0.0, 1.01, 0.1)
-    for a1 in allocation_increments:
+for a1 in allocation_increments:
     for b1 in allocation_increments:
         if a1+b1 <= 1:
            for c1 in allocation_increments:
@@ -58,8 +60,15 @@ allocation_increments = np.arange(0.0, 1.01, 0.1)
                             vol = np.std(na_ret)
                             sharpe_ratio = ((252)**(.5))*(daily_return/vol)
                             cum_ret = na_portfolio[len(na_portfolio)-1]
-                            print "Share Ratio", sharpe_ratio
-                            print "Volume", vol
-                            print "Daily Return", daily_return
-                            print "Culumitive Return", cum_ret
+                            print sharpe_ratio
+
+if sharpe_ratio > max_sharpe_ratio:
+    max_sharpe_ratio
+
+print max_sharpe_ratio
+
+#print "Share Ratio", sharpe_ratio
+                                #print "Volume", vol
+                                #print "Daily Return", daily_return
+#print "Culumitive Return", cum_ret
 
