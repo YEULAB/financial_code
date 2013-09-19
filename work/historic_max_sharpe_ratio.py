@@ -61,14 +61,8 @@ for a1 in allocation_increments:
                             sharpe_ratio = ((252)**(.5))*(daily_return/vol)
                             cum_ret = na_portfolio[len(na_portfolio)-1]
                             print sharpe_ratio
-
-if sharpe_ratio > max_sharpe_ratio:
-    max_sharpe_ratio
-
-print max_sharpe_ratio
-
-#print "Share Ratio", sharpe_ratio
-                                #print "Volume", vol
-                                #print "Daily Return", daily_return
-#print "Culumitive Return", cum_ret
+                            print "Share Ratio", sharpe_ratio
+                            print "Volume", vol
+                            print "Daily Return", daily_return
+                            print "Culumitive Return", cum_ret
 
