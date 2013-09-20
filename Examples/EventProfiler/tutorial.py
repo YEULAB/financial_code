@@ -41,7 +41,7 @@ nan = no information about any event.
 
 def find_events(ls_symbols, d_data):
     ''' Finding the event dataframe '''
-    df_close = d_data['close']
+    df_close = d_data['actual_close']
     ts_market = df_close['SPY']
 
     print "Finding Events"
@@ -65,7 +65,7 @@ def find_events(ls_symbols, d_data):
 
             # Event is found if the symbol is down more then 3% while the
             # market is up more then 2%
-            if f_symreturn_today <= -0.03 and f_marketreturn_today >= 0.02:
+            if f_symprice_yest >= 10.0 and f_symprice_today < 10.0:
                 df_events[s_sym].ix[ldt_timestamps[i]] = 1
 
     return df_events
