@@ -1,16 +1,3 @@
-'''
-(c) 2011, 2012 Georgia Tech Research Corporation
-This source code is released under the New BSD license.  Please see
-http://wiki.quantsoftware.org/index.php?title=QSTK_License
-for license details.
-
-Created on January, 24, 2013
-
-@author: Sourabh Bajaj
-@contact: sourabhbajaj@gatech.edu
-@summary: Example tutorial code.
-'''
-
 # QSTK Imports
 import QSTK.qstkutil.qsdateutil as du
 import QSTK.qstkutil.tsutil as tsu
