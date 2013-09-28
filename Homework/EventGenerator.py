@@ -17,15 +17,15 @@ matplotlib.use('Agg')
 import csv
 import argparse as ap
 import pandas 
-from qstkutil import DataAccess as da
+from QSTK.qstkutil import DataAccess as da
 import numpy as np
 import math
 import copy
-import qstkutil.qsdateutil as du
+import QSTK.qstkutil.qsdateutil as du
 import datetime as dt
-import qstkutil.DataAccess as da
-import qstkutil.tsutil as tsu
-import qstkstudy.EventProfiler as ep
+import QSTK.qstkutil.DataAccess as da
+import QSTK.qstkutil.tsutil as tsu
+import QSTK.qstkstudy.EventProfiler as ep
 
 """
 Accepts a list of symbols along with start and end date

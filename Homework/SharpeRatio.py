@@ -6,9 +6,9 @@ import matplotlib
 matplotlib.use('Agg')
 
 import math
-import qstkutil.qsdateutil as du
-import qstkutil.tsutil as tsu
-import qstkutil.DataAccess as da
+import QSTK.qstkutil.qsdateutil as du
+import QSTK.qstkutil.tsutil as tsu
+import QSTK.qstkutil.DataAccess as da
 import datetime as dt
 import matplotlib.pyplot as plt
 from pylab import *
