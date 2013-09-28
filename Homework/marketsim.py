@@ -1,63 +1,73 @@
-# python imports
-import cPickle
-import sys
-import numpy as np
-# from pandas import DataMatrix
+'''
+@summary: Market Simulator - Read Order and Calculate Portfolio values
+'''
+# Enable running in Ubuntu Server 12.10
+import matplotlib
+matplotlib.use('Agg')
+
+import argparse as ap
+import csv
 import datetime as dt
-import random
-
-# qstk imports
 import QSTK.qstkutil.qsdateutil as du
-
 import QSTK.qstkutil.DataAccess as da
+from pylab import *
+import pandas
+import numpy as np
 
+#
+# Read program argument
+# Example:
+# python marketsim.py 1000000 orders.csv values.csv
+argparser = ap.ArgumentParser(description="Take cash, order file and output values file.")
+argparser.add_argument("cash", type=float)
+argparser.add_argument("orderfile")
+argparser.add_argument("outputfile")
+args = argparser.parse_args()
 
-print "Running the market simulation tool with "+sys.argv[1] +" money, to "+sys.argv[2] 
-symbols = np.loadtxt(sys.argv[2],delimiter=',',dtype='i4, i1, i, S4, S4, i',comments='#',skiprows=0)
+print "Starting cash: " + str(args.cash)
+print "Order file: " + args.orderfile
+print "Output file: " + args.outputfile
 
-startday = dt.date(symbols[0][0], symbols[0][1], symbols[0][2])
-endday = dt.date(symbols[-1][0], symbols[-1][1], symbols[-1][2])
+#
+# Read order file
+orders = []
+with open(args.orderfile, "rU") as infile:
+		reader = csv.reader(infile, "excel")
+		
+		#read each line in order file
+		for line in reader:
+			orders.append([dt.datetime(int(line[0]), int(line[1]), int(line[2]), 16), line[3], line[4], int(line[5])])
 
-print "printing data between", startday, "and", endday
-timeofday=dt.timedelta(hours=16)
-timestamps = du.getNYSEdays(startday,endday,timeofday)
+#
+# Prepare to read the data
+orders = sorted(orders)
+startday = orders[0][0]
+endday = orders[-1][0]
+timeofday = dt.timedelta(hours=16)
+timestamps = du.getNYSEdays(startday, endday, timeofday)
 
-workingSymbols = set()
-for i in range(0, symbols.shape[0]):
-    workingSymbols.add(symbols[i][3])
-
-# print "timestamps", timestamps
-
+#
+#Read close data from symbols list
 dataobj = da.DataAccess('Yahoo')
-# Reading the Data
-close = dataobj.get_data(timestamps, workingSymbols, "close")
+symbols = list(set([order[1] for order in orders]))
+close = dataobj.get_data(timestamps, symbols, "close", verbose=True)
 
-cache=float(sys.argv[1])
-portfolio={}
-nextOrder = 0
-output = open(sys.argv[3], "w")
-for moment in timestamps:
-    while nextOrder<symbols.shape[0] and moment.date() == dt.date(symbols[nextOrder][0], symbols[nextOrder][1], symbols[nextOrder][2]):
-        symbol = symbols[nextOrder][3]
-        amount = symbols[nextOrder][5]
-        if symbols[nextOrder][4] == 'Sell':
-            amount = -amount
-        if symbol in portfolio:
-            portfolio[symbol] = portfolio[symbol] + amount
-        else:
-            portfolio[symbol] = amount
-        price = close[symbol][moment]
-        cache = cache - price * amount
-        print symbol, price, amount, price * amount, cache
-        nextOrder = nextOrder + 1
+position = close * 0
+position['cash'] = float(0)
 
-    currValue=cache
-    for symbol in portfolio.viewkeys():
-        currValue = currValue + portfolio[symbol] * close[symbol][moment]
-    print moment.date(), currValue, portfolio, nextOrder, "!!!", cache
-    output.write('%(year)04d,%(month)02d,%(day)02d,%(value)d \n' % {"year":moment.year, "month":moment.month, "day":moment.day, "value":currValue })
-    output.write(str(currValue) + "\n")
+for order in orders:
+	qty = order[3] if order[2] == "Buy" else -order[3]
+	price = close[order[1]][order[0]]
+	position[order[1]][order[0]] = position[order[1]][order[0]] + qty
+	position['cash'][order[0]] = position['cash'][order[0]] - (qty * price)
 
-        
-output.close
-print "target: 1133860"
+for i in range(1, len(position.index)):
+	position.ix[i] = position.ix[i] + position.ix[i - 1]
+
+position['value'] = sum(position.ix[:, :-1] * close, axis=1) + position['cash'] + 1000000
+
+with open(args.outputfile, "w") as outfile:
+	writer = csv.writer(outfile)
+
+	for index in position.index:
+		writer.writerow([index.year, index.month, index.day, position['value'][index]])
