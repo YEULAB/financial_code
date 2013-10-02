@@ -1,7 +1,4 @@
-## Computational Investing I
 ## HW 3 - analyse.py
-##
-## Author: alexcpsec
 
 import pandas as pd
 import pandas.io.parsers as pd_par
