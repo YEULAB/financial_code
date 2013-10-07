@@ -29,7 +29,7 @@ nan = no information about any event.
 1 = status bit(positively confirms the event occurence)
 """
 
-evtAmount = 5.0
+evtAmount = 6.0
 orderFile = "order_h4-6.csv"
 strSymbols =  "sp5002012"
 
