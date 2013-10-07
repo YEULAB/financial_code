@@ -3,8 +3,8 @@ from datetime import date, datetime, timedelta
 from collections import defaultdict
 
 import qenv
-from qstkutil.DataAccess import DataAccess
-from qstkutil.qsdateutil import getNYSEdays
+from QSTK.qstkutil.DataAccess import DataAccess
+from QSTK.qstkutil.qsdateutil import getNYSEdays
 from hw1 import Equities
 
 

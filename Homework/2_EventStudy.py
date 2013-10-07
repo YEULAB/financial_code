@@ -61,7 +61,7 @@ def find_events(ls_symbols, d_data):
             f_symprice_yest = df_close[s_sym].ix[ldt_timestamps[i - 1]]
             f_marketprice_today = ts_market.ix[ldt_timestamps[i]]
             f_marketprice_yest = ts_market.ix[ldt_timestamps[i - 1]]
-            f_cutoff = 5.0
+            f_cutoff = 6.0
             if f_symprice_today < f_cutoff and f_symprice_yest >= f_cutoff:
                 df_events[s_sym].ix[ldt_timestamps[i]] = 1
 

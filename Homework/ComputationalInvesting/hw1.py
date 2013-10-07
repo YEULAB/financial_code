@@ -3,8 +3,8 @@ from math import sqrt
 from numpy import mean, std
 
 import qenv
-from qstkutil.DataAccess import DataAccess
-from qstkutil.qsdateutil import getNYSEdays
+from QSTK.qstkutil.DataAccess import DataAccess
+from QSTK.qstkutil.qsdateutil import getNYSEdays
 
 
 class Equities:
