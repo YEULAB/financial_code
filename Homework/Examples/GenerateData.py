@@ -14,10 +14,10 @@ Created on April, 20, 2012
 
 #import libraries
 import numpy as np
-import qstkutil.qsdateutil as du
-import qstkutil.tsutil as tsu
-import qstkutil.DataAccess as da
-import qstkfeat.sb_featutil as feat
+import QSTK.qstkutil.qsdateutil as du
+import QSTK.qstkutil.tsutil as tsu
+import QSTK.qstkutil.DataAccess as da
+import QSTK.qstkfeat.sb_featutil as feat
 import datetime as dt
 import pickle
 import os

@@ -1,14 +1,6 @@
 '''
-(c) 2011, 2012 Georgia Tech Research Corporation
-This source code is released under the New BSD license.  Please see
-http://wiki.quantsoftware.org/index.php?title=QSTK_License
-for license details.
-
-Created on December, 5, 2012
-
-@author: Woraphot Chokratanasombat
-@contact: guhungry@gmail.com
-@summary: Event Profiler Tutorial
+Run code as follows:
+	python Backtester.py <price> 2008-01-01 2012-12-31 sp5002012 orders.csv
 '''
 # Enable running in Ubuntu Server 12.10
 import matplotlib
