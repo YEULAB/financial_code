@@ -1,7 +1,6 @@
 ## Computational Investing I
 ## HW 4
-##
-## Author: alexcpsec
+
 
 import pandas as pd
 import numpy as np
@@ -30,7 +29,7 @@ nan = no information about any event.
 """
 
 evtAmount = 8.0
-orderFile = "order_h4-6.csv"
+orderFile = "orders.csv"
 strSymbols =  "sp5002012"
 
 def find_events(ls_symbols, d_data, event_amount):

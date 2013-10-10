@@ -1,15 +1,5 @@
-'''
-(c) 2011, 2012 Georgia Tech Research Corporation
-This source code is released under the New BSD license.  Please see
-http://wiki.quantsoftware.org/index.php?title=QSTK_License
-for license details.
-
-Created on January, 23, 2013
-
-@author: Sourabh Bajaj
-@contact: sourabhbajaj@gatech.edu
-@summary: Event Profiler Tutorial
-'''
+## Computational Investing I
+## HW 4
 
 
 import pandas as pd
@@ -20,7 +10,6 @@ import QSTK.qstkutil.qsdateutil as du
 import datetime as dt
 import QSTK.qstkutil.DataAccess as da
 import QSTK.qstkutil.tsutil as tsu
-import csv
 import QSTK.qstkstudy.EventProfiler as ep
 
 """
@@ -39,13 +28,14 @@ nan = no information about any event.
 1 = status bit(positively confirms the event occurence)
 """
 
+evtAmount = 8.0
+orderFile = "orders.csv"
+strSymbols =  "sp5002012"
 
-def find_events(ls_symbols, d_data):
-    ''' Finding the event dataframe '''
+def find_events(ls_symbols, d_data, event_amount):
     df_close = d_data['actual_close']
-    ts_market = df_close['SPY']
 
-    print "Finding Events"
+    print "Finding Events..."
 
     # Creating an empty dataframe
     df_events = copy.deepcopy(df_close)
@@ -59,34 +49,48 @@ def find_events(ls_symbols, d_data):
             # Calculating the returns for this timestamp
             f_symprice_today = df_close[s_sym].ix[ldt_timestamps[i]]
             f_symprice_yest = df_close[s_sym].ix[ldt_timestamps[i - 1]]
-            f_marketprice_today = ts_market.ix[ldt_timestamps[i]]
-            f_marketprice_yest = ts_market.ix[ldt_timestamps[i - 1]]
-            f_cutoff = 6.0
-            if f_symprice_today < f_cutoff and f_symprice_yest >= f_cutoff:
+            
+            if f_symprice_yest >= event_amount and f_symprice_today < event_amount:
                 df_events[s_sym].ix[ldt_timestamps[i]] = 1
 
     return df_events
 
+def create_orders_events(ldt_timestamps, symbols_list, event_amount):
+    dataobj = da.DataAccess('Yahoo')
+    ls_symbols = dataobj.get_symbols_from_list(symbols_list)
+    ls_symbols.append('SPY')
+
+    ls_keys = ['close','actual_close']
+    ldf_data = dataobj.get_data(ldt_timestamps, ls_symbols, ls_keys)
+    d_data = dict(zip(ls_keys, ldf_data))
+    for s_key in ls_keys:
+        d_data[s_key] = d_data[s_key].fillna(method = 'ffill')
+        d_data[s_key] = d_data[s_key].fillna(method = 'bfill')
+        d_data[s_key] = d_data[s_key].fillna(1.0)
+
+    df_events = find_events(ls_symbols, d_data, event_amount)
+
+    file_out = open( orderFile, "w" )
+
+    for col in df_events.columns:
+        for i in range(0,len(ldt_timestamps)):
+            date = ldt_timestamps[i]
+            if not np.isnan(df_events.get_value(date,col)):
+                if i+5 >= len(ldt_timestamps):
+                    date2 = ldt_timestamps[len(ldt_timestamps) - 1]
+                else:
+                    date2 = ldt_timestamps[i+5]
+                file_out.writelines(date.strftime('%Y,%m,%d') + "," + str(col) + ",Buy,100\n")
+                file_out.writelines(date2.strftime('%Y,%m,%d') + "," + str(col) + ",Sell,100\n")
+
+    file_out.close()
+
+                
 
 if __name__ == '__main__':
     dt_start = dt.datetime(2008, 1, 1)
     dt_end = dt.datetime(2009, 12, 31)
     ldt_timestamps = du.getNYSEdays(dt_start, dt_end, dt.timedelta(hours=16))
 
-    dataobj = da.DataAccess('Yahoo')
-    ls_symbols = dataobj.get_symbols_from_list('sp5002012')
-    ls_symbols.append('SPY')
-    ls_keys = ['open', 'high', 'low', 'close', 'volume', 'actual_close']
-    ldf_data = dataobj.get_data(ldt_timestamps, ls_symbols, ls_keys)
-    d_data = dict(zip(ls_keys, ldf_data))
-
-    for s_key in ls_keys:
-        d_data[s_key] = d_data[s_key].fillna(method = 'ffill')
-        d_data[s_key] = d_data[s_key].fillna(method = 'bfill')
-        d_data[s_key] = d_data[s_key].fillna(1.0)
-
-    df_events = find_events(ls_symbols, d_data)
-    print "Creating Study"
-    ep.eventprofiler(df_events, d_data, i_lookback=20, i_lookforward=20,
-                 s_filename='MyEventStudy.pdf', b_market_neutral=True, b_errorbars=True,
-                s_market_sym='SPY')
+    ## Starting up with SP500 2008
+    create_orders_events(ldt_timestamps, strSymbols, evtAmount)
