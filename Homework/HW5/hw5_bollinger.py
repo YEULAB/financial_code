@@ -32,7 +32,7 @@ def bollinger_bands(ldt_timestamps, ls_symbols, lookback):
 
     df_bands = (df_close - df_mean) / df_std
     
-
+    
   
 if __name__ == '__main__':
     dt_start = dt.datetime(2010, 1, 1)
@@ -43,4 +43,4 @@ if __name__ == '__main__':
 
     ## Starting up with SP500 2008
     bollinger_bands(ldt_timestamps, ls_symbols, lookback)
-
+    

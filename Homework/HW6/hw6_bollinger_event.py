@@ -46,7 +46,7 @@ def bollinger_events(ldt_timestamps, lookback):
             f_boll_yest = df_bands[s_sym].ix[ldt_timestamps[i - 1]]
             f_spy_today = df_bands['SPY'].ix[ldt_timestamps[i]]
             
-            if f_boll_yest >= -2.00 and f_boll_today <= -2.00 and f_spy_today >= 1.4:
+            if f_boll_yest >= -2.00 and f_boll_today <= -2.00 and f_spy_today >= 1.3:
                 df_events[s_sym].ix[ldt_timestamps[i]] = 1
 
     report_filename = "hw6_event_boll_sp5002012_quiz.pdf"
